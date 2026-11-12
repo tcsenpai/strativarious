@@ -340,7 +340,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
     // Desktop: the glass panel floats over the right side. Frame the scene for the free area
     // (w - covered) and let the rendered view extend under the panel.
     const panel = document.querySelector("aside");
-    const covered = panel && getComputedStyle(panel).position === "fixed" ? panel.offsetWidth + 32 : 0;
+    const covered = panel && getComputedStyle(panel).position === "fixed" ? panel.offsetWidth : 0;
     const free = Math.max(w - covered, w * 0.4);
     camera.aspect = free / h;
     // On narrow areas (portrait phones) zoom out so the painting fits.
