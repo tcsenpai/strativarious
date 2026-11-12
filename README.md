@@ -6,7 +6,7 @@ Take a photo of a watercolor and Strativarious estimates which pigments were gla
 diluted, then lets you pull the glazes apart in 3D, replay them in order, isolate a pigment, or
 compare the reconstruction with the photo. It runs entirely in the browser: nothing is uploaded.
 
-![The demo painting broken into glazes](docs/screenshot.png)
+![The default demo (art by dekugh) broken into glazes](docs/screenshot.png)
 
 ## Use it
 
@@ -114,7 +114,8 @@ The image is not part of this repository.
 [MIT](LICENSE). Bundles [three.js](https://threejs.org) (MIT). The procedural landscape demo
 (`scripts/demo-painting.js`, `src/static/demo.png`) is covered by the same license.
 
-**Not covered by the MIT license:** the default demo image `src/static/demo-ocarina.jpg` is
+**Not covered by the MIT license:** the default demo image `src/static/demo-ocarina.jpg` (also shown in
+`docs/screenshot.png`) is
 [“Zelda: Ocarina of Time title screen”](https://www.newgrounds.com/art/view/dekugh/zelda-ocarina-of-time-title-screen)
 by **dekugh**, used with credit; all rights remain with the artist. *The Legend of Zelda* is a trademark of Nintendo.
 Forks and redistributions should not assume they may reuse it.
