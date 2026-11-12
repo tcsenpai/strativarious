@@ -93,6 +93,12 @@ strativarious photo.jpg --palette my-palette.json -o photo.html
 - Tan, DiVerdi, Lu, Gingold, *Pigmento: Pigment-Based Image Analysis and Editing* (TVCG 2018).
 - Sochorová, Jamriška, *Practical Pigment Mixing for Digital Painting* (Mixbox, SIGGRAPH Asia 2021).
 
+## Acknowledgments
+
+During development the algorithm was tried on a watercolor portrait from
+[this Domestika project](https://www.domestika.org/it/projects/1863353-final-project).
+The image is not part of this repository.
+
 ## License
 
 [MIT](LICENSE). Bundles [three.js](https://threejs.org) (MIT). The demo painting is procedurally
