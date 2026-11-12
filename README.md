@@ -96,11 +96,17 @@ strativarious photo.jpg --palette my-palette.json -o photo.html
 
 ## Acknowledgments
 
+Default demo art by [dekugh](https://www.newgrounds.com/art/view/dekugh/zelda-ocarina-of-time-title-screen).
 During development the algorithm was tried on a watercolor portrait from
 [this Domestika project](https://www.domestika.org/it/projects/1863353-final-project).
 The image is not part of this repository.
 
 ## License
 
-[MIT](LICENSE). Bundles [three.js](https://threejs.org) (MIT). The demo painting is procedurally
-generated (`scripts/demo-painting.js`) and covered by the same license.
+[MIT](LICENSE). Bundles [three.js](https://threejs.org) (MIT). The procedural landscape demo
+(`scripts/demo-painting.js`, `src/static/demo.png`) is covered by the same license.
+
+**Not covered by the MIT license:** the default demo image `src/static/demo-ocarina.jpg` is
+[“Zelda: Ocarina of Time title screen”](https://www.newgrounds.com/art/view/dekugh/zelda-ocarina-of-time-title-screen)
+by **dekugh**, used with credit; all rights remain with the artist. *The Legend of Zelda* is a trademark of Nintendo.
+Forks and redistributions should not assume they may reuse it.

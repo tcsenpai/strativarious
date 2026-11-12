@@ -69,3 +69,4 @@ dialog::backdrop { background: #000a; }
 .group { margin: 12px 0 4px; font-size: 13px; color: var(--muted); }
 .pigset { border: 1px solid var(--line); border-radius: 10px; margin: 14px 0; padding: 4px 12px 0; }
 .pigset legend { font-size: 14px; color: var(--muted); padding: 0 4px; }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; cursor: pointer; text-decoration: underline; }

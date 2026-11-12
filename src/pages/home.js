@@ -115,11 +115,13 @@ $("photo").onchange = (e) => {
   const file = e.target.files[0];
   if (file) useSource(file, file.name.replace(/\.[^.]+$/, "").replace(/^(IMG|PXL|DSC)[_-]?/i, ""));
 };
-$("demoBtn").onclick = async () => {
-  await useSource(await (await fetch("./demo.png")).blob(), t("new.demoTitle"));
+async function useDemo(url, title) {
+  await useSource(await (await fetch(url)).blob(), title);
   $("palette").value = store.DEMO_ID;
   $("palette").onchange();
-};
+}
+$("demoBtn").onclick = () => useDemo("./demo-ocarina.jpg", t("new.demoArtTitle"));
+$("demoLandscape").onclick = () => useDemo("./demo.png", t("new.demoTitle"));
 $("go").onclick = () => source && runDecompose($("go"), $("status"), {
   source, paletteId: $("palette").value, pigmentIds: pickedPigments($("pigments")),
   title: $("title").value.trim() || t("new.defaultTitle", { date: fmtDate() }),
