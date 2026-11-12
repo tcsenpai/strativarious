@@ -46,18 +46,18 @@ function render() {
   $("firstTime").classList.toggle("hidden", pals.some((p) => !p.demo && !p.example));
   paletteChooser($("palette"), $("paletteWarn"), $("pigments"));
 
-  $("palettes").replaceChildren(...pals.map((p) => h("div", { className: "row", style: "margin: 12px 0" },
-    h("div", { style: "flex: 1; min-width: 140px" },
+  $("palettes").replaceChildren(...pals.map((p) => h("div", { className: "pal" },
+    h("div", { className: "head" },
       h("b", { textContent: p.name }),
       ...(p.synthetic ? [h("span", { className: "badge", textContent: t("synthetic.badge") })] : []),
-      ...(p.example ? [h("span", { className: "badge", textContent: t("example.badge") })] : []),
-      h("div", { className: "small muted",
-        textContent: p.description ?? t("palettes.count", { n: p.pigments.length }) + (p.demo ? ` · ${t("palettes.demo")}` : "") })),
-    chips(p.pigments),
-    h("button", { className: "icon-btn", style: "flex: none; width: 40px", title: t("palettes.export"), textContent: "⤓",
-      onclick: () => exportPalette(p) }),
-    ...(p.demo ? [] : [h("button", { className: "icon-btn danger", style: "flex: none; width: 40px",
-      title: t("card.delete"), textContent: "🗑", onclick: () => removePalette(p) })]))));
+      ...(p.example ? [h("span", { className: "badge", textContent: t("example.badge") })] : [])),
+    h("div", { className: "small muted desc",
+      textContent: p.description ?? t("palettes.count", { n: p.pigments.length }) + (p.demo ? ` · ${t("palettes.demo")}` : "") }),
+    h("div", { className: "foot" },
+      chips(p.pigments),
+      h("button", { className: "icon-btn", title: t("palettes.export"), textContent: "⤓", onclick: () => exportPalette(p) }),
+      ...(p.demo ? [] : [h("button", { className: "icon-btn danger", title: t("card.delete"), textContent: "🗑",
+        onclick: () => removePalette(p) })])))));
 
   thumbs.forEach(URL.revokeObjectURL);
   thumbs = paints.map((p) => URL.createObjectURL(p.preview));
@@ -215,24 +215,24 @@ $("combineSave").onclick = async () => {
 };
 
 // ---------- install ----------
+// A small header pill, not a banner: Android/desktop Chrome get the native prompt,
+// iOS (no prompt API) gets a one-line how-to on tap.
 const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
 let installEvt = null;
 addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   installEvt = e;
-  $("install").classList.remove("hidden");
   $("installBtn").classList.remove("hidden");
 });
 $("installBtn").onclick = async () => {
+  if (isIos) return void $("installIos").classList.toggle("hidden");
   if (!installEvt) return;
   installEvt.prompt();
   await installEvt.userChoice;
   installEvt = null;
-  $("install").classList.add("hidden");
+  $("installBtn").classList.add("hidden");
 };
-if (!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent)) {
-  $("install").classList.remove("hidden");
-  $("installIos").classList.remove("hidden");
-}
+if (!standalone && isIos) $("installBtn").classList.remove("hidden");
 
 load();

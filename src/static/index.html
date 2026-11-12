@@ -17,14 +17,13 @@
 <main>
   <header class="top">
     <h1>Strativarious</h1>
-    <span id="langSlot"></span>
+    <span class="top-actions">
+      <button id="installBtn" class="pill hidden" data-i18n-title="install.button"><span class="pill-icon">⤓</span><span class="pill-text" data-i18n="install.button"></span></button>
+      <span id="langSlot"></span>
+    </span>
   </header>
   <p class="sub" data-i18n="app.tagline"></p>
-
-  <section id="install" class="hidden">
-    <button id="installBtn" class="btn block hidden" data-i18n="install.button"></button>
-    <p id="installIos" class="small muted hidden" data-i18n="install.ios" style="margin: 0"></p>
-  </section>
+  <p id="installIos" class="small muted hidden" data-i18n="install.ios"></p>
 
   <section id="firstTime" class="banner hidden">
     <h2 data-i18n="first.title"></h2>
@@ -32,7 +31,8 @@
     <a class="btn primary" href="./calibrate.html" data-i18n="first.cta"></a>
   </section>
 
-  <section>
+  <div class="layout">
+  <section class="area-new">
     <h2 data-i18n="new.title"></h2>
     <label class="btn primary block" for="photo" data-i18n="new.photo"></label>
     <input id="photo" type="file" accept="image/*">
@@ -56,25 +56,26 @@
     </div>
   </section>
 
-  <section>
+  <section class="area-paintings">
     <h2 data-i18n="paintings.title"></h2>
     <div id="paintings" class="grid"></div>
     <p id="noPaintings" class="muted hidden" data-i18n="paintings.empty"></p>
   </section>
 
-  <section>
+  <section class="area-palettes">
     <div class="row" style="justify-content: space-between">
       <h2 style="margin: 0" data-i18n="palettes.title"></h2>
       <div class="row">
-        <button id="combineBtn" class="btn" data-i18n="combine.button"></button>
-        <a class="btn" href="./calibrate.html" data-i18n="palettes.new"></a>
+        <button id="combineBtn" class="btn compact" data-i18n="combine.button"></button>
+        <a class="btn compact" href="./calibrate.html" data-i18n="palettes.new"></a>
       </div>
     </div>
     <div id="palettes"></div>
-    <label class="btn" for="importFile" data-i18n="palettes.import"></label>
+    <label class="btn compact" for="importFile" data-i18n="palettes.import"></label>
     <input id="importFile" type="file" accept="application/json,.json">
     <p id="listStatus" class="small err"></p>
   </section>
+  </div>
 
   <p class="small muted" data-i18n="storage.note"></p>
 </main>
