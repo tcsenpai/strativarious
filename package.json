@@ -1,0 +1,17 @@
+{
+  "name": "strativarious",
+  "version": "0.1.0",
+  "description": "Breaks watercolor paintings down into layers of color, in 3D. Runs entirely in the browser.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build.js",
+    "dev": "bun build.js && bun scripts/serve.js",
+    "test": "bun test",
+    "demo": "bun scripts/make-demo.js"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  }
+}

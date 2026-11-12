@@ -1,0 +1,23 @@
+[project]
+name = "strativarious"
+version = "0.1.0"
+description = "Reference implementation and CLI: break watercolor photos down into pigment layers (Kubelka-Munk)."
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "pillow>=10"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+strativarious = "strativarious:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["strativarious"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

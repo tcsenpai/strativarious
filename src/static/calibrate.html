@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calibration · Strativarious</title>
+<meta name="theme-color" content="#1d1f24">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="./style.css">
+<style>
+  #canvasWrap { position: relative; margin-top: 12px; }
+  #cv { width: 100%; display: block; border-radius: 10px; touch-action: none; background: #111; }
+  #prompt { position: sticky; top: 0; z-index: 2; background: var(--accent); color: var(--accent-fg);
+            font-weight: 600; padding: 10px 14px; border-radius: 10px; margin-top: 12px; }
+  .pig { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: center;
+         padding: 12px 0; border-top: 1px solid var(--line); }
+  .pig .chips { display: flex; gap: 4px; }
+  .pig .chip { width: 30px; height: 30px; }
+  .pig .warn { grid-column: 1 / -1; font-size: 13px; color: var(--err); }
+  svg text { font: 11px system-ui; fill: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <a href="./" data-i18n="cal.back"></a>
+    <span id="langSlot"></span>
+  </header>
+  <h1 data-i18n="cal.title"></h1>
+  <p class="sub" data-i18n-html="cal.sub"></p>
+
+  <section>
+    <h2 data-i18n="cal.s1"></h2>
+    <ol class="steps">
+      <li data-i18n-html="cal.s1a"></li>
+      <li data-i18n-html="cal.s1b"></li>
+      <li data-i18n-html="cal.s1c"></li>
+    </ol>
+    <svg viewBox="0 0 320 150" width="100%" style="max-width: 420px" role="img">
+      <title data-i18n="cal.schemaAlt"></title>
+      <g transform="translate(70,18)">
+        <text x="30" y="-6" text-anchor="middle" data-i18n="cal.col.paper"></text>
+        <text x="90" y="-6" text-anchor="middle" data-i18n="cal.col.full"></text>
+        <text x="150" y="-6" text-anchor="middle" data-i18n="cal.col.mid"></text>
+        <text x="210" y="-6" text-anchor="middle" data-i18n="cal.col.light"></text>
+        <g id="schemaRows"></g>
+        <rect x="0" y="0" width="240" height="120" fill="none" stroke="#9aa0ab"/>
+        <circle cx="0" cy="0" r="4" fill="#e7b469"/><circle cx="240" cy="0" r="4" fill="#e7b469"/>
+        <circle cx="240" cy="120" r="4" fill="#e7b469"/><circle cx="0" cy="120" r="4" fill="#e7b469"/>
+      </g>
+    </svg>
+    <p class="small muted" data-i18n="cal.dots"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="cal.s2"></h2>
+    <ol class="steps">
+      <li data-i18n-html="cal.s2a"></li>
+      <li data-i18n-html="cal.s2b"></li>
+    </ol>
+    <label class="field"><span data-i18n="cal.rows"></span>
+      <input id="rows" type="number" min="2" max="12" value="8" inputmode="numeric"></label>
+    <label class="btn primary block" for="photo" data-i18n="cal.photo"></label>
+    <input id="photo" type="file" accept="image/*">
+  </section>
+
+  <section id="step3" class="hidden">
+    <h2 data-i18n="cal.s3"></h2>
+    <p class="small muted" data-i18n-html="cal.s3hint"></p>
+    <div id="prompt"></div>
+    <div id="canvasWrap"><canvas id="cv"></canvas></div>
+    <div class="row" style="margin-top: 10px"><button id="reset" class="btn" data-i18n="cal.reset"></button></div>
+  </section>
+
+  <section id="step4" class="hidden">
+    <h2 data-i18n="cal.s4"></h2>
+    <p class="small muted" data-i18n="cal.s4hint"></p>
+    <div id="pigs"></div>
+    <label class="field"><span data-i18n="cal.palName"></span><input id="palName" type="text"></label>
+    <button id="save" class="btn primary block" data-i18n="cal.save"></button>
+    <p id="status" class="small"></p>
+  </section>
+</main>
+<script type="module" src="./calibrate.js"></script>
+</body>
+</html>

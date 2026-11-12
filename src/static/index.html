@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strativarious</title>
+<meta name="theme-color" content="#1d1f24">
+<meta name="description" content="Breaks watercolors down into layers of color, in 3D.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<main>
+  <header class="top">
+    <h1>Strativarious</h1>
+    <span id="langSlot"></span>
+  </header>
+  <p class="sub" data-i18n="app.tagline"></p>
+
+  <section id="install" class="hidden">
+    <button id="installBtn" class="btn block hidden" data-i18n="install.button"></button>
+    <p id="installIos" class="small muted hidden" data-i18n="install.ios" style="margin: 0"></p>
+  </section>
+
+  <section id="firstTime" class="banner hidden">
+    <h2 data-i18n="first.title"></h2>
+    <p data-i18n-html="first.body"></p>
+    <a class="btn primary" href="./calibrate.html" data-i18n="first.cta"></a>
+  </section>
+
+  <section>
+    <h2 data-i18n="new.title"></h2>
+    <label class="btn primary block" for="photo" data-i18n="new.photo"></label>
+    <input id="photo" type="file" accept="image/*">
+    <button id="demoBtn" class="btn block" style="margin-top: 8px" data-i18n="new.demoButton"></button>
+    <img id="preview" class="preview hidden" alt="">
+    <div id="form" class="hidden">
+      <label class="field"><span data-i18n="new.titleLabel"></span><input id="title" type="text" data-i18n-placeholder="new.titlePh"></label>
+      <label class="field"><span data-i18n="new.palette"></span><select id="palette"></select></label>
+      <p id="paletteWarn" class="small muted hidden"></p>
+      <fieldset class="pigset">
+        <legend data-i18n="new.pigments"></legend>
+        <div id="pigments"></div>
+        <p class="small muted" data-i18n="new.pigmentsHint"></p>
+      </fieldset>
+      <button id="go" class="btn primary block" data-i18n="new.go"></button>
+      <p id="status" class="small"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="paintings.title"></h2>
+    <div id="paintings" class="grid"></div>
+    <p id="noPaintings" class="muted hidden" data-i18n="paintings.empty"></p>
+  </section>
+
+  <section>
+    <div class="row" style="justify-content: space-between">
+      <h2 style="margin: 0" data-i18n="palettes.title"></h2>
+      <div class="row">
+        <button id="combineBtn" class="btn" data-i18n="combine.button"></button>
+        <a class="btn" href="./calibrate.html" data-i18n="palettes.new"></a>
+      </div>
+    </div>
+    <div id="palettes"></div>
+    <label class="btn" for="importFile" data-i18n="palettes.import"></label>
+    <input id="importFile" type="file" accept="application/json,.json">
+    <p id="listStatus" class="small err"></p>
+  </section>
+
+  <p class="small muted" data-i18n="storage.note"></p>
+</main>
+
+<dialog id="redoDlg">
+  <h2 data-i18n="redo.title"></h2>
+  <p class="small muted" data-i18n="redo.body"></p>
+  <label class="field"><span data-i18n="new.palette"></span><select id="redoPalette"></select></label>
+  <p id="redoWarn" class="small muted hidden"></p>
+  <fieldset class="pigset">
+    <legend data-i18n="new.pigments"></legend>
+    <div id="redoPigments"></div>
+  </fieldset>
+  <p id="redoStatus" class="small err"></p>
+  <div class="row">
+    <button id="redoCancel" class="btn" data-i18n="common.cancel"></button>
+    <button id="redoGo" class="btn primary" style="flex: 1" data-i18n="redo.go"></button>
+  </div>
+</dialog>
+
+<dialog id="combineDlg">
+  <h2 data-i18n="combine.title"></h2>
+  <p class="small muted" data-i18n="combine.body"></p>
+  <p class="small muted" data-i18n="synthetic.warn"></p>
+  <div id="combineList"></div>
+  <label class="field"><span data-i18n="cal.palName"></span><input id="combineName" type="text"></label>
+  <p id="combineStatus" class="small err"></p>
+  <div class="row">
+    <button id="combineCancel" class="btn" data-i18n="common.cancel"></button>
+    <button id="combineSave" class="btn primary" style="flex: 1" data-i18n="combine.save"></button>
+  </div>
+</dialog>
+
+<script type="module" src="./home.js"></script>
+</body>
+</html>

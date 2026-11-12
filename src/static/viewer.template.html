@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d1f24">
+__HEAD__
+<title>__TITLE__</title>
+<style>
+  :root { color-scheme: dark; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+          --bg: #1d1f24; --panel: #25282f; --panel2: #2e323b; --line: #3a3f4b; --fg: #ece9e4; --muted: #9aa0ab; --accent: #e7b469; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); }
+  body { display: flex; }
+  #stage { flex: 1; position: relative; min-width: 0; touch-action: none; }
+  #stage canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+  #stage canvas:active { cursor: grabbing; }
+  #caption { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); max-width: calc(100% - 32px);
+             background: #000a; backdrop-filter: blur(6px); padding: 8px 14px; border-radius: 999px; font-weight: 600;
+             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+  #loading { position: absolute; inset: 0; display: grid; place-items: center; background: var(--bg); color: var(--muted); }
+  aside { width: 310px; padding: 18px; background: var(--panel); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  select.lang { background: var(--panel2); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; font: inherit; font-size: 13px; }
+  #home { color: var(--accent); text-decoration: none; font-size: 14px; }
+  h1 { font-size: 20px; margin: 0; overflow-wrap: anywhere; }
+  .ctl label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); height: 28px; margin: 0; }
+  .btns { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 6px; }
+  .btns button { white-space: nowrap; padding: 0 6px; }
+  button { font: inherit; color: inherit; }
+  .btns button, #save, #export { min-height: 42px; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
+  #play { background: var(--accent); color: #1d1f24; border-color: transparent; font-weight: 700; }
+  .btns button:hover, #save:hover, #export:hover { filter: brightness(1.12); }
+  .sect { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 4px 0 -6px; }
+  .layer { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 10px; cursor: pointer;
+           user-select: none; border: 1px solid transparent; transition: opacity .15s, background .15s; }
+  .layer:hover { background: var(--panel2); }
+  .layer.solo { border-color: var(--accent); background: var(--panel2); }
+  .layer.off { opacity: .42; }
+  .num { width: 20px; text-align: center; color: var(--muted); font-size: 13px; }
+  .sw { width: 26px; height: 26px; border-radius: 7px; border: 1px solid #0006; flex: none; }
+  .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .txt b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .txt small { color: var(--muted); font-size: 12px; }
+  .eye { width: 34px; height: 34px; border-radius: 8px; background: none; border: 0; cursor: pointer; font-size: 16px; }
+  .eye:hover { background: #ffffff14; }
+  .hint { font-size: 12px; color: var(--muted); margin: 0; }
+  details { font-size: 12px; color: var(--muted); }
+  summary { cursor: pointer; }
+  details pre { white-space: pre-wrap; font: inherit; margin: 6px 0 0; }
+  .hidden { display: none !important; }
+  @media (max-width: 760px) {
+    body { flex-direction: column; }
+    #stage { height: 58vh; flex: none; }
+    aside { width: 100%; flex: 1; padding: 14px; }
+    #caption { bottom: 10px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="caption" class="hidden"></div>
+  <div id="loading" data-i18n="v.loading"></div>
+</div>
+<aside>
+  <div class="top"><a id="home" class="hidden" href="/" data-i18n="v.home"></a><span id="langSlot"></span></div>
+  <h1 id="title"></h1>
+  <div class="ctl">
+    <label for="timeline"><span data-i18n="v.applied"></span><span id="timelineLabel"></span></label>
+    <input id="timeline" type="range" min="0" step="0.01">
+  </div>
+  <div class="btns">
+    <button id="play"></button>
+    <button id="viewFront" data-i18n="v.front" data-i18n-title="v.frontKey"></button>
+    <button id="view3d" data-i18n="v.3d" data-i18n-title="v.3dKey"></button>
+  </div>
+  <div class="ctl">
+    <label for="explode"><span data-i18n="v.explode"></span></label>
+    <input id="explode" type="range" min="0" max="1" step="0.01" value="0">
+  </div>
+  <div class="ctl">
+    <label for="split"><span data-i18n="v.compare"></span><span data-i18n="v.drag"></span></label>
+    <input id="split" type="range" min="0" max="1" step="0.005" value="0">
+  </div>
+  <div class="sect" data-i18n="v.order"></div>
+  <div id="layers"></div>
+  <p class="hint" data-i18n="v.hint"></p>
+  <button id="save" data-i18n="v.save"></button>
+  <button id="export" class="hidden" data-i18n="v.export"></button>
+  <details>
+    <summary data-i18n="v.how"></summary>
+    <p data-i18n-html="v.howBody"></p>
+    <pre id="tech"></pre>
+  </details>
+</aside>
+__SCRIPTS__
+</body>
+</html>

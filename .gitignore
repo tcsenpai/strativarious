@@ -1,0 +1,7 @@
+node_modules/
+dist/
+# personal data and photos: never committed
+local/
+__pycache__/
+*.egg-info/
+.pytest_cache/

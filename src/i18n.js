@@ -1,0 +1,319 @@
+// Shared by the app pages and the 3D viewer (also bundled into exported HTML files).
+// English is the default; the user's choice is remembered in localStorage.
+
+export const LANGS = { en: "English", it: "Italiano" };
+const STORE = "strati.lang";
+
+const dict = {
+  en: {
+    "app.tagline": "Breaks your watercolors down into layers of color, in 3D.",
+    "storage.note": "Everything stays on this device, in this browser. Export a palette to use it on another device.",
+    "new.demoButton": "✨ Try it with the demo painting",
+    "new.demoTitle": "Demo landscape",
+    "new.pigments": "Pigments used in this painting",
+    "new.pigmentsHint": "Uncheck the ones you didn't use: with fewer pigments the layers are more reliable.",
+    "new.pickOne": "Pick at least one pigment.",
+    "new.progress": "Working… {pct}%",
+    "palettes.export": "Export",
+    "palettes.import": "Import palette",
+    "err.import": "this file isn't a valid palette",
+    "err.not_found": "not found",
+    "v.export": "Download as HTML",
+    "common.cancel": "Cancel",
+    "card.redo": "Break down again with another palette",
+    "card.delete": "Delete",
+    "card.palette": "Palette: {name}",
+    "confirm.painting": "Delete “{name}”? This can't be undone.",
+    "confirm.palette": "Delete the palette “{name}”? Paintings already made with it stay.",
+    "redo.title": "Break down again",
+    "redo.body": "Same photo, different palette: you get a new painting to compare with this one.",
+    "redo.go": "Break down",
+    "synthetic.badge": "synthetic",
+    "synthetic.warn": "Synthetic palette: its pigments come from different calibrations (paper and light may differ), so the result is less reliable.",
+    "combine.button": "+ Combine colors",
+    "combine.title": "Combine calibrated colors",
+    "combine.body": "Pick pigments from your calibrated palettes to build a new one, without painting a new grid.",
+    "combine.default": "Mix · {date}",
+    "combine.need": "Pick from 2 to 12 pigments.",
+    "combine.save": "Save synthetic palette",
+    "combine.none": "You need at least one calibrated palette first.",
+    "err.palette_protected": "the demo palette can't be deleted",
+    "lang.label": "Language",
+    "install.button": "Install app",
+    "install.ios": "To install: tap Share, then “Add to Home Screen”.",
+
+    "first.title": "First time?",
+    "first.body": "Right now there's only a <b>demo</b> palette with made-up colors. For real results, calibrate with your own pigments: about 15 minutes of painting and one photo.",
+    "first.cta": "Calibrate",
+    "new.title": "New painting",
+    "new.photo": "📷 Take or choose a photo of the painting",
+    "new.titleLabel": "Title",
+    "new.titlePh": "e.g. Portrait of Giulia",
+    "new.palette": "Palette",
+    "new.demo": "(demo)",
+    "new.fakeWarn": "Demo palette: the colors are made up, the result is only indicative.",
+    "new.go": "Break into layers",
+    "new.badImage": "Can't read this image. Try a JPEG photo.",
+    "new.failed": "Something went wrong: {msg}",
+    "new.retry": "Try again",
+    "new.defaultTitle": "Painting {date}",
+    "paintings.title": "Your paintings",
+    "paintings.empty": "None yet: upload a photo of a painting above.",
+    "palettes.title": "Palettes",
+    "palettes.new": "+ New calibration",
+    "palettes.count": "{n} pigments",
+    "palettes.demo": "demo",
+
+    "err.palette_invalid": "the palette needs a name and 2 to 12 pigments",
+
+    "cal.back": "← Strativarious",
+    "cal.title": "Calibration",
+    "cal.sub": "So the tool knows <b>your</b> colors instead of guessing them.",
+    "cal.s1": "1 · Paint the grid",
+    "cal.s1a": "On a sheet of the <b>same paper</b> you paint on, pencil a grid with <b>4 columns</b> and <b>one row per pigment</b> (squares of about 2–3 cm).",
+    "cal.s1b": "In each row: first column <b>empty</b> (bare paper), then the same pigment at <b>full strength</b>, <b>medium</b> and <b>very diluted</b>. One pure pigment per row, no mixing.",
+    "cal.s1c": "Let it dry completely: wet paint looks darker.",
+    "cal.col.paper": "paper",
+    "cal.col.full": "full",
+    "cal.col.mid": "medium",
+    "cal.col.light": "diluted",
+    "cal.schemaAlt": "Grid layout",
+    "cal.dots": "The yellow dots are the 4 corners you'll tap on the photo.",
+    "cal.s2": "2 · Take a photo",
+    "cal.s2a": "<b>Indirect</b> daylight, no flash, no yellow lamps. Use the same spot and light as for your painting photos.",
+    "cal.s2b": "Phone <b>parallel</b> to the sheet, the whole grid in frame, no shadows.",
+    "cal.rows": "How many pigments (rows)?",
+    "cal.photo": "📷 Take or choose a photo of the grid",
+    "cal.s3": "3 · Tap the 4 corners of the grid",
+    "cal.s3hint": "You can drag the points to adjust them. The small squares show where I read the color: they must fall <b>inside</b> the cells.",
+    "cal.c0": "top-left",
+    "cal.c1": "top-right",
+    "cal.c2": "bottom-right",
+    "cal.c3": "bottom-left",
+    "cal.corner": "Tap the {corner} corner of the grid ({n} of 4)",
+    "cal.done": "Done! Check that the small squares sit inside the cells, then scroll down.",
+    "cal.reset": "Restart corners",
+    "cal.s4": "4 · Name your pigments",
+    "cal.s4hint": "From the left: paper, full, medium, diluted (as I see them in the photo).",
+    "cal.namePh": "Pigment {n} (e.g. Yellow ochre)",
+    "cal.defaultName": "Pigment {n}",
+    "cal.w.paper": "the paper cell looks dark: is it really empty?",
+    "cal.w.order": "full → medium → diluted don't get lighter in order: check the corners.",
+    "cal.w.light": "the diluted swatch is almost the same as the paper.",
+    "cal.palName": "Palette name",
+    "cal.palDefault": "My palette · {date}",
+    "cal.save": "Save palette",
+    "cal.saved": "Palette saved! ",
+    "cal.next": "Now break down a painting →",
+    "cal.saveFailed": "Couldn't save: {msg}",
+
+    "v.loading": "Preparing the layers…",
+    "v.home": "← All paintings",
+    "v.applied": "Glazes applied",
+    "v.all": "all",
+    "v.of": "{i} of {n}",
+    "v.play": "▶ Play",
+    "v.pause": "⏸ Pause",
+    "v.front": "Front",
+    "v.frontKey": "Key F",
+    "v.3d": "3D",
+    "v.3dKey": "Key 3",
+    "v.explode": "Separate the layers",
+    "v.compare": "Compare with the original",
+    "v.drag": "← drag",
+    "v.order": "Pigments, in painting order",
+    "v.hint": "Tap a pigment to see it alone, 👁 to hide it. Drag to rotate, pinch or scroll to zoom. Keyboard: space, ← →, F, 3.",
+    "v.save": "Save image",
+    "v.how": "How to read these layers",
+    "v.howBody": "This is <b>one</b> plausible sequence of glazes that recreates the painting with the palette's pigments, not necessarily the one you actually followed. The order follows the rule “light, broad washes first, dark details last”.",
+    "v.eye": "Show/hide",
+    "v.solo": "Alone: {name} · {strength}",
+    "v.paper": "Blank paper",
+    "v.step": "Glaze {i} of {n} · {name}, {strength}",
+    "v.coverage": "{strength} · {pct}% of the sheet",
+    "v.tech": "Palette: {palette}\nReconstruction error: mean {mean}/255, 95% under {p95}/255\nReserved whites: {whites}%",
+
+    "strength.veryDiluted": "very diluted",
+    "strength.diluted": "diluted",
+    "strength.medium": "medium",
+    "strength.heavy": "heavy",
+  },
+  it: {
+    "app.tagline": "Scompone i tuoi acquerelli nelle velature di colore, in 3D.",
+    "storage.note": "Tutto resta su questo dispositivo, in questo browser. Esporta una tavolozza per usarla su un altro dispositivo.",
+    "new.demoButton": "✨ Prova con il dipinto demo",
+    "new.demoTitle": "Paesaggio demo",
+    "new.pigments": "Pigmenti usati in questo dipinto",
+    "new.pigmentsHint": "Togli quelli che non hai usato: con meno pigmenti gli strati sono più affidabili.",
+    "new.pickOne": "Scegli almeno un pigmento.",
+    "new.progress": "Sto scomponendo… {pct}%",
+    "palettes.export": "Esporta",
+    "palettes.import": "Importa tavolozza",
+    "err.import": "questo file non è una tavolozza valida",
+    "err.not_found": "non trovato",
+    "v.export": "Scarica come HTML",
+    "common.cancel": "Annulla",
+    "card.redo": "Riscomponi con un'altra tavolozza",
+    "card.delete": "Elimina",
+    "card.palette": "Tavolozza: {name}",
+    "confirm.painting": "Eliminare “{name}”? Non si può annullare.",
+    "confirm.palette": "Eliminare la tavolozza “{name}”? I dipinti già fatti con questa restano.",
+    "redo.title": "Riscomponi",
+    "redo.body": "Stessa foto, tavolozza diversa: ottieni un nuovo dipinto da confrontare con questo.",
+    "redo.go": "Scomponi",
+    "synthetic.badge": "sintetica",
+    "synthetic.warn": "Tavolozza sintetica: i pigmenti vengono da calibrazioni diverse (carta e luce possono cambiare), quindi il risultato è meno affidabile.",
+    "combine.button": "+ Combina colori",
+    "combine.title": "Combina colori calibrati",
+    "combine.body": "Scegli pigmenti dalle tue tavolozze calibrate per crearne una nuova, senza dipingere un'altra griglia.",
+    "combine.default": "Mix · {date}",
+    "combine.need": "Scegli da 2 a 12 pigmenti.",
+    "combine.save": "Salva tavolozza sintetica",
+    "combine.none": "Prima serve almeno una tavolozza calibrata.",
+    "err.palette_protected": "la tavolozza di prova non si può eliminare",
+    "lang.label": "Lingua",
+    "install.button": "Installa l'app",
+    "install.ios": "Per installarla: tocca Condividi, poi “Aggiungi alla schermata Home”.",
+
+    "first.title": "Prima volta?",
+    "first.body": "Per ora c'è solo una tavolozza <b>di prova</b>, con colori inventati. Per risultati veri fai la calibrazione con i tuoi pigmenti: circa 15 minuti di pennello e una foto.",
+    "first.cta": "Fai la calibrazione",
+    "new.title": "Nuovo dipinto",
+    "new.photo": "📷 Scatta o scegli la foto del dipinto",
+    "new.titleLabel": "Titolo",
+    "new.titlePh": "es. Ritratto di Giulia",
+    "new.palette": "Tavolozza",
+    "new.demo": "(prova)",
+    "new.fakeWarn": "Tavolozza di prova: i colori sono inventati, il risultato è indicativo.",
+    "new.go": "Scomponi in strati",
+    "new.badImage": "Non riesco a leggere questa immagine. Prova con una foto JPEG.",
+    "new.failed": "Qualcosa è andato storto: {msg}",
+    "new.retry": "Riprova",
+    "new.defaultTitle": "Dipinto {date}",
+    "paintings.title": "I tuoi dipinti",
+    "paintings.empty": "Ancora nessuno: carica la foto di un dipinto qui sopra.",
+    "palettes.title": "Tavolozze",
+    "palettes.new": "+ Nuova calibrazione",
+    "palettes.count": "{n} pigmenti",
+    "palettes.demo": "di prova",
+
+    "err.palette_invalid": "servono un nome e da 2 a 12 pigmenti",
+
+    "cal.back": "← Strativarious",
+    "cal.title": "Calibrazione",
+    "cal.sub": "Così lo strumento conosce i <b>tuoi</b> colori e non deve inventarli.",
+    "cal.s1": "1 · Dipingi la griglia",
+    "cal.s1a": "Su un foglio della <b>stessa carta</b> che usi per dipingere, traccia a matita una griglia di <b>4 colonne</b> e <b>una riga per pigmento</b> (quadretti di circa 2–3 cm).",
+    "cal.s1b": "In ogni riga: prima colonna <b>vuota</b> (carta), poi lo stesso pigmento <b>pieno</b>, <b>medio</b> e <b>molto diluito</b>. Un pigmento puro per riga, senza mescolare.",
+    "cal.s1c": "Lascia asciugare bene: il colore bagnato è più scuro.",
+    "cal.col.paper": "carta",
+    "cal.col.full": "pieno",
+    "cal.col.mid": "medio",
+    "cal.col.light": "diluito",
+    "cal.schemaAlt": "Schema della griglia",
+    "cal.dots": "I pallini gialli sono i 4 angoli che toccherai sulla foto.",
+    "cal.s2": "2 · Fotografa",
+    "cal.s2a": "Luce del giorno <b>indiretta</b>, niente flash, niente lampade gialle. Usa lo stesso posto e la stessa luce delle foto dei dipinti.",
+    "cal.s2b": "Telefono <b>parallelo</b> al foglio, griglia intera nell'inquadratura, senza ombre.",
+    "cal.rows": "Quanti pigmenti (righe)?",
+    "cal.photo": "📷 Scatta o scegli la foto della griglia",
+    "cal.s3": "3 · Tocca i 4 angoli della griglia",
+    "cal.s3hint": "Puoi trascinare i punti per correggerli. I quadratini mostrano dove leggo il colore: devono cadere <b>dentro</b> le caselle.",
+    "cal.c0": "in alto a sinistra",
+    "cal.c1": "in alto a destra",
+    "cal.c2": "in basso a destra",
+    "cal.c3": "in basso a sinistra",
+    "cal.corner": "Tocca l'angolo {corner} della griglia ({n} di 4)",
+    "cal.done": "Fatto! Controlla che i quadratini stiano dentro le caselle, poi scorri giù.",
+    "cal.reset": "Ricomincia gli angoli",
+    "cal.s4": "4 · Dai un nome ai pigmenti",
+    "cal.s4hint": "Da sinistra: carta, pieno, medio, diluito (così come li vedo nella foto).",
+    "cal.namePh": "Pigmento {n} (es. Ocra gialla)",
+    "cal.defaultName": "Pigmento {n}",
+    "cal.w.paper": "la casella della carta sembra scura: è davvero vuota?",
+    "cal.w.order": "pieno → medio → diluito non schiariscono in ordine: controlla gli angoli.",
+    "cal.w.light": "il diluito è quasi uguale alla carta.",
+    "cal.palName": "Nome della tavolozza",
+    "cal.palDefault": "La mia tavolozza · {date}",
+    "cal.save": "Salva tavolozza",
+    "cal.saved": "Tavolozza salvata! ",
+    "cal.next": "Ora scomponi un dipinto →",
+    "cal.saveFailed": "Non riesco a salvare: {msg}",
+
+    "v.loading": "Preparo gli strati…",
+    "v.home": "← Tutti i dipinti",
+    "v.applied": "Velature applicate",
+    "v.all": "tutte",
+    "v.of": "{i} di {n}",
+    "v.play": "▶ Riproduci",
+    "v.pause": "⏸ Pausa",
+    "v.front": "Fronte",
+    "v.frontKey": "Tasto F",
+    "v.3d": "3D",
+    "v.3dKey": "Tasto 3",
+    "v.explode": "Separa gli strati",
+    "v.compare": "Confronta con l'originale",
+    "v.drag": "← trascina",
+    "v.order": "Pigmenti, nell'ordine di stesura",
+    "v.hint": "Tocca un pigmento per vederlo da solo, 👁 per nasconderlo. Trascina per ruotare, pizzica o usa la rotella per lo zoom. Tastiera: spazio, ← →, F, 3.",
+    "v.save": "Salva immagine",
+    "v.how": "Come leggere questi strati",
+    "v.howBody": "È <b>una</b> sequenza plausibile di velature che ricrea il dipinto con i pigmenti della tavolozza, non necessariamente quella che hai seguito tu. L'ordine segue la regola “prima le campiture chiare e larghe, poi i dettagli scuri”.",
+    "v.eye": "Mostra/nascondi",
+    "v.solo": "Solo: {name} · {strength}",
+    "v.paper": "Carta bianca",
+    "v.step": "Velatura {i} di {n} · {name}, {strength}",
+    "v.coverage": "{strength} · {pct}% del foglio",
+    "v.tech": "Tavolozza: {palette}\nErrore ricostruzione: medio {mean}/255, 95% sotto {p95}/255\nBianchi riservati: {whites}%",
+
+    "strength.veryDiluted": "molto diluito",
+    "strength.diluted": "diluito",
+    "strength.medium": "medio",
+    "strength.heavy": "carico",
+  },
+};
+
+function stored() {
+  try { return localStorage.getItem(STORE); } catch { return null; } // file:// in some browsers
+}
+
+let lang = stored() in dict ? stored() : "en";
+document.documentElement.lang = lang;
+
+export const getLang = () => lang;
+
+export function t(key, vars = {}) {
+  const s = dict[lang][key] ?? dict.en[key] ?? key;
+  return s.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : `{${k}}`));
+}
+
+/** Fills static markup: data-i18n (text), data-i18n-html (trusted dictionary HTML), -placeholder, -title, -alt. */
+export function apply(root = document) {
+  root.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  root.querySelectorAll("[data-i18n-html]").forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  for (const attr of ["placeholder", "title", "alt"]) {
+    root.querySelectorAll(`[data-i18n-${attr}]`).forEach((el) => { el.setAttribute(attr, t(el.dataset[`i18n${attr[0].toUpperCase()}${attr.slice(1)}`])); });
+  }
+}
+
+export function setLang(next) {
+  if (!(next in dict) || next === lang) return;
+  lang = next;
+  try { localStorage.setItem(STORE, next); } catch { /* not persisted */ }
+  document.documentElement.lang = next;
+  apply();
+  dispatchEvent(new CustomEvent("langchange", { detail: next }));
+}
+
+/** A <select> to switch language; place it anywhere. */
+export function langPicker() {
+  const sel = document.createElement("select");
+  sel.className = "lang";
+  sel.setAttribute("aria-label", t("lang.label"));
+  for (const [code, name] of Object.entries(LANGS)) sel.add(new Option(name, code, false, code === lang));
+  sel.addEventListener("change", () => setLang(sel.value));
+  return sel;
+}
+
+/** Localized short date, e.g. 12/11/2026. */
+export const fmtDate = (d = new Date()) => d.toLocaleDateString(lang === "it" ? "it-IT" : "en-GB");

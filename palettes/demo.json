@@ -1,0 +1,12 @@
+{
+  "name": "Demo palette",
+  "note": "Fake calibration: full-strength colors guessed by eye. Replace with a real calibration.",
+  "pigments": [
+    { "id": "ochre",       "name": "Yellow ochre",     "masstone": [205, 155, 70] },
+    { "id": "sienna",      "name": "Burnt sienna",     "masstone": [160, 75, 40] },
+    { "id": "rose",        "name": "Quinacridone rose", "masstone": [195, 45, 95] },
+    { "id": "ultramarine", "name": "Ultramarine blue", "masstone": [45, 55, 150] },
+    { "id": "umber",       "name": "Burnt umber",      "masstone": [85, 60, 45] },
+    { "id": "paynes",      "name": "Payne's grey",     "masstone": [55, 60, 75] }
+  ]
+}
