@@ -14,8 +14,12 @@ async function load() {
   render();
 }
 
-const palLabel = (p) => p.demo ? `${p.name} ${t("new.demo")}` : p.synthetic ? `${p.name} (${t("synthetic.badge")})` : p.name;
-const defaultPalette = () => (pals.find((p) => !p.demo && !p.synthetic) ?? pals.find((p) => !p.demo) ?? pals[0])?.id ?? "";
+const calibrated = (p) => !p.demo && !p.example && !p.synthetic;
+const palLabel = (p) => p.demo ? `${p.name} ${t("new.demo")}`
+  : p.example ? `${p.name} (${t("example.badge")})`
+  : p.synthetic ? `${p.name} (${t("synthetic.badge")})` : p.name;
+// Prefer the user's own calibration, then their synthetic mixes, then a realistic example.
+const defaultPalette = () => (pals.find(calibrated) ?? pals.find((p) => p.synthetic) ?? pals.find((p) => p.example) ?? pals[0])?.id ?? "";
 
 /** Palette <select> + warning + "pigments used" checkboxes, kept in sync. */
 function paletteChooser(sel, warnEl, pigBox, checked) {
@@ -24,7 +28,7 @@ function paletteChooser(sel, warnEl, pigBox, checked) {
   sel.value = pals.some((p) => p.id === prev) ? prev : defaultPalette();
   const sync = () => {
     const p = pals.find((x) => x.id === sel.value);
-    const msg = p?.demo ? t("new.fakeWarn") : p?.synthetic ? t("synthetic.warn") : "";
+    const msg = p?.demo ? t("new.fakeWarn") : p?.example ? t("example.warn") : p?.synthetic ? t("synthetic.warn") : "";
     warnEl.textContent = msg;
     warnEl.classList.toggle("hidden", !msg);
     pigBox.replaceChildren(...(p?.pigments ?? []).map((pig) => {
@@ -39,15 +43,16 @@ function paletteChooser(sel, warnEl, pigBox, checked) {
 const pickedPigments = (pigBox) => [...pigBox.querySelectorAll("input:checked")].map((b) => b.value);
 
 function render() {
-  $("firstTime").classList.toggle("hidden", pals.some((p) => !p.demo));
+  $("firstTime").classList.toggle("hidden", pals.some((p) => !p.demo && !p.example));
   paletteChooser($("palette"), $("paletteWarn"), $("pigments"));
 
   $("palettes").replaceChildren(...pals.map((p) => h("div", { className: "row", style: "margin: 12px 0" },
     h("div", { style: "flex: 1; min-width: 140px" },
       h("b", { textContent: p.name }),
       ...(p.synthetic ? [h("span", { className: "badge", textContent: t("synthetic.badge") })] : []),
+      ...(p.example ? [h("span", { className: "badge", textContent: t("example.badge") })] : []),
       h("div", { className: "small muted",
-        textContent: t("palettes.count", { n: p.pigments.length }) + (p.demo ? ` · ${t("palettes.demo")}` : "") })),
+        textContent: p.description ?? t("palettes.count", { n: p.pigments.length }) + (p.demo ? ` · ${t("palettes.demo")}` : "") })),
     chips(p.pigments),
     h("button", { className: "icon-btn", style: "flex: none; width: 40px", title: t("palettes.export"), textContent: "⤓",
       onclick: () => exportPalette(p) }),
@@ -115,13 +120,16 @@ $("photo").onchange = (e) => {
   const file = e.target.files[0];
   if (file) useSource(file, file.name.replace(/\.[^.]+$/, "").replace(/^(IMG|PXL|DSC)[_-]?/i, ""));
 };
-async function useDemo(url, title) {
+async function useDemo(url, title, paletteId) {
   await useSource(await (await fetch(url)).blob(), title);
-  $("palette").value = store.DEMO_ID;
+  // Fall back to the demo palette if the user deleted the example.
+  $("palette").value = pals.some((p) => p.id === paletteId) ? paletteId : store.DEMO_ID;
   $("palette").onchange();
 }
-$("demoBtn").onclick = () => useDemo("./demo-ocarina.jpg", t("new.demoArtTitle"));
-$("demoLandscape").onclick = () => useDemo("./demo.png", t("new.demoTitle"));
+// The artwork has green grass: the Landscape example (with phthalo green) fits it; the procedural
+// landscape was painted with the demo palette.
+$("demoBtn").onclick = () => useDemo("./demo-ocarina.jpg", t("new.demoArtTitle"), "example-landscape");
+$("demoLandscape").onclick = () => useDemo("./demo.png", t("new.demoTitle"), store.DEMO_ID);
 $("go").onclick = () => source && runDecompose($("go"), $("status"), {
   source, paletteId: $("palette").value, pigmentIds: pickedPigments($("pigments")),
   title: $("title").value.trim() || t("new.defaultTitle", { date: fmtDate() }),
@@ -161,7 +169,7 @@ $("redoGo").onclick = () => {
 
 // ---------- palettes: export / import / combine ----------
 function exportPalette(p) {
-  const { id, demo, ...data } = p;
+  const { id, demo, example, order, ...data } = p;
   download(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }), `${safeFilename(p.name)}.json`);
 }
 $("importFile").onchange = async (e) => {

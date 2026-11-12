@@ -28,8 +28,8 @@ async function exportHtml(p) {
   download(new Blob([html], { type: "text/html" }), `${safeFilename(p.title)}.html`);
 }
 
-const meta = ({ title, palette, width, height, paper, error, whitesFraction }) =>
-  ({ title, palette, width, height, paper, error, whitesFraction });
+const meta = ({ title, palette, width, height, paper, paperSuspect, error, whitesFraction }) =>
+  ({ title, palette, width, height, paper, paperSuspect, error, whitesFraction });
 
 const id = new URLSearchParams(location.search).get("id");
 const painting = id && (await getPainting(id));

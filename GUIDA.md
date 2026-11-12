@@ -17,7 +17,9 @@ Funziona tutto nel browser del telefono: **niente viene caricato da nessuna part
 
 ## 2. La calibrazione (una volta sola, circa 15 minuti più l'asciugatura)
 
-Serve perché lo strumento impari i **tuoi** colori. Senza, usa una tavolozza di prova con colori inventati.
+Serve perché lo strumento impari i **tuoi** colori. Nel frattempo puoi usare le **tavolozze di esempio**
+(triade, primari doppi, paesaggio, ritratto, set da studente): colori tipici di pigmenti comuni, utili per provare.
+Se non corrispondono ai tuoi colori, con **+ Combina colori** ne crei una con i soli pigmenti che possiedi.
 
 **Prepara il foglio**
 - Prendi un pezzo della **stessa carta** che usi per dipingere.
@@ -92,7 +94,7 @@ Serve perché lo strumento impari i **tuoi** colori. Senza, usa una tavolozza di
 
 | problema | soluzione |
 |---|---|
-| Colori tutti spostati (troppo gialli o troppo blu) | nella foto manca carta non dipinta, o la luce è diversa da quella della calibrazione |
+| Colori tutti spostati (troppo gialli o troppo blu), o un ⚠ sulla carta nel viewer | nella foto manca carta non dipinta, o la luce è diversa da quella della calibrazione |
 | ⚠ in calibrazione | sposta gli angoli; se resta, la casella "carta" non è vuota o il pieno è più chiaro del medio |
 | Un pigmento compare dappertutto | togli la spunta ai pigmenti che non hai usato |
 | Dopo un aggiornamento vedi la versione vecchia | chiudi e riapri l'app |

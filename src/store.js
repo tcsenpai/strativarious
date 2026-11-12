@@ -1,5 +1,6 @@
 // IndexedDB persistence: everything stays on the device. Blobs (images) are stored as-is.
 import demoPalette from "../palettes/demo.json" with { type: "json" };
+import examplePalettes from "../palettes/examples.json" with { type: "json" };
 
 const DB_NAME = "strativarious";
 export const DEMO_ID = "demo";
@@ -28,6 +29,9 @@ async function run(store, mode, fn) {
   });
 }
 
+// Own palettes newest first, then the examples in their curated order, then the demo.
+const rank = (p) => (p.demo ? 2 : p.example ? 1 : 0);
+const paletteOrder = (a, b) => rank(a) - rank(b) || (a.order ?? 0) - (b.order ?? 0) || byNewest(a, b);
 const byNewest = (a, b) => (b.created ?? "").localeCompare(a.created ?? "");
 export const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
@@ -37,14 +41,20 @@ export async function deletePalette(id) {
   if (id === DEMO_ID) throw new Error("palette_protected"); // the fallback when nothing is calibrated
   return run("palettes", "readwrite", (s) => s.delete(id));
 }
+const SEEDED_KEY = "strativarious.examplesSeeded";
+
 export async function listPalettes() {
   const all = await run("palettes", "readonly", (s) => s.getAll());
-  if (!all.some((p) => p.id === DEMO_ID)) {
-    const demo = { ...demoPalette, id: DEMO_ID, demo: true, created: "" };
-    await putPalette(demo);
-    all.push(demo);
+  const add = async (p) => { await putPalette(p); all.push(p); };
+  if (!all.some((p) => p.id === DEMO_ID)) await add({ ...demoPalette, id: DEMO_ID, demo: true, created: "" });
+  // Examples are added once: if the user deletes one, it stays deleted.
+  if (!localStorage.getItem(SEEDED_KEY)) {
+    for (const [order, ex] of examplePalettes.entries()) {
+      if (!all.some((p) => p.id === ex.id)) await add({ ...ex, example: true, order, created: "" });
+    }
+    localStorage.setItem(SEEDED_KEY, "1");
   }
-  return all.sort(byNewest);
+  return all.sort(paletteOrder);
 }
 
 export const getPainting = (id) => run("paintings", "readonly", (s) => s.get(id));
@@ -63,12 +73,19 @@ export function validatePalette(p) {
   const name = String(p?.name ?? "").trim();
   if (!name || !Array.isArray(p.pigments) || p.pigments.length < 2 || p.pigments.length > 12) fail();
   const rgb = (c) => (Array.isArray(c) && c.length === 3 && c.every((v) => Number.isInteger(v) && v >= 0 && v <= 255) ? c : fail());
+  const seen = new Map();
+  const uniqueId = (raw) => {
+    const n = seen.get(raw) ?? 0;
+    seen.set(raw, n + 1);
+    return n ? `${raw}-${n + 1}` : raw; // same pigment picked from two palettes
+  };
   return {
     name: name.slice(0, 60),
     created: new Date().toISOString(),
+    ...(p.description ? { description: String(p.description).slice(0, 200) } : {}),
     ...(p.synthetic ? { synthetic: true } : {}),
     pigments: p.pigments.map((x, i) => ({
-      id: String(x.id ?? x.name ?? `pigment-${i + 1}`).toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40) || `pigment-${i + 1}`,
+      id: uniqueId(String(x.id ?? x.name ?? `pigment-${i + 1}`).toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40) || `pigment-${i + 1}`),
       name: String(x.name ?? `Pigment ${i + 1}`).trim().slice(0, 40),
       masstone: rgb(x.masstone),
       ...(x.swatches ? { swatches: x.swatches.map(rgb) } : {}),

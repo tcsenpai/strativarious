@@ -38,8 +38,15 @@ export function startViewer(data, { homeHref, onExport } = {}) {
     }
     const tail = sheet
       ? /* glsl */ `
-        float a = clamp((1.0 - dot(R, vec3(0.2126, 0.7152, 0.0722))) * 3.0, 0.0, 1.0);
-        gl_FragColor = vec4(toSrgb(R), pow(a, 0.8) * uOpacity);`
+        float a = pow(clamp((1.0 - dot(R, vec3(0.2126, 0.7152, 0.0722))) * 3.0, 0.0, 1.0), 0.8);
+        // Glass sheen (fresnel + a soft band that slides with the view) ONLY where there is no
+        // pigment: (1-a)^2 keeps painted areas at their exact color.
+        vec3 V = normalize(cameraPosition - vWorld);
+        float fres = pow(1.0 - abs(V.z), 2.0);
+        float band = 1.0 - smoothstep(0.0, 0.22, abs((vUv.x - 0.55 * vUv.y) - (0.2 + 0.6 * clamp(0.5 + V.x, 0.0, 1.0))));
+        float glass = (0.03 + 0.09 * fres + 0.07 * band) * (1.0 - a) * (1.0 - a);
+        float outA = a + glass;
+        gl_FragColor = vec4((toSrgb(R) * a + glass) / max(outA, 1e-4), outA * uOpacity);`
       : /* glsl */ `
         vec3 col = toSrgb(R * uPaper);
         if (vUv.x < uSplit) col = texture2D(uOriginal, vUv).rgb;
@@ -48,6 +55,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
         gl_FragColor = vec4(col, 1.0);`;
     return /* glsl */ `
       varying vec2 vUv;
+      varying vec3 vWorld;
       uniform vec3 uPaper;
       uniform float uOpacity;
       uniform float uSplit;
@@ -63,7 +71,12 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   }
   const vert = /* glsl */ `
     varying vec2 vUv;
-    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+    varying vec3 vWorld;
+    void main() {
+      vUv = uv;
+      vWorld = (modelMatrix * vec4(position, 1.0)).xyz;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }`;
 
   // ---------- texture ----------
   const manager = new LoadingManager();
@@ -96,11 +109,11 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   }
 
   // ---------- scene ----------
-  const renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  // Transparent canvas: the page provides a neutral backdrop (and the panel blurs it).
+  const renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   $("stage").prepend(renderer.domElement);
   const scene = new Scene();
-  scene.background = new Color(0x1d1f24);
   const camera = new PerspectiveCamera(40, 1, 0.01, 100);
 
   const geo = new PlaneGeometry(W, H);
@@ -123,6 +136,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   const goal = { explode: 0, theta: 0, phi: Math.PI / 2, radius: 4.2 };
   const cur = { ...goal };
   const ease = (a, b, k) => a + (b - a) * k;
+  let dirty = true; // set whenever the scene must be redrawn
 
   function weightOf(i) {
     if (state.solo >= 0) return i === state.solo ? 1 : 0;
@@ -194,6 +208,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   }
 
   function refreshUI() {
+    dirty = true;
     rows.forEach(({ row, eye }, i) => {
       row.classList.toggle("solo", state.solo === i);
       row.classList.toggle("off", weightOf(i) === 0);
@@ -219,6 +234,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   $("langSlot").append(langPicker());
   apply();
   addEventListener("langchange", refreshUI);
+  if (data.paperSuspect) $("paperWarn").classList.remove("hidden");
   if (homeHref) {
     $("home").href = homeHref;
     $("home").classList.remove("hidden");
@@ -263,7 +279,14 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   $("save").addEventListener("click", () => {
     const a = document.createElement("a");
     a.download = `${(data.title ?? "strati").replace(/[^\w\- ]+/g, "")}.png`;
-    a.href = renderer.domElement.toDataURL("image/png");
+    // The canvas is transparent: flatten it onto the backdrop color for the saved file.
+    const src = renderer.domElement;
+    const out = Object.assign(document.createElement("canvas"), { width: src.width, height: src.height });
+    const ctx = out.getContext("2d");
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#15171c";
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(src, 0, 0);
+    a.href = out.toDataURL("image/png");
     a.click();
   });
 
@@ -302,6 +325,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
       pinch0 = d;
     }
     pointers.set(e.pointerId, e);
+    dirty = true;
   });
   el.addEventListener("wheel", (e) => {
     e.preventDefault();
@@ -313,15 +337,27 @@ export function startViewer(data, { homeHref, onExport } = {}) {
   function resize() {
     const { clientWidth: w, clientHeight: h } = $("stage");
     renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    // On narrow screens (portrait phones) zoom out so the painting fits.
+    // Desktop: the glass panel floats over the right side. Frame the scene for the free area
+    // (w - covered) and let the rendered view extend under the panel.
+    const panel = document.querySelector("aside");
+    const covered = panel && getComputedStyle(panel).position === "fixed" ? panel.offsetWidth + 32 : 0;
+    const free = Math.max(w - covered, w * 0.4);
+    camera.aspect = free / h;
+    // On narrow areas (portrait phones) zoom out so the painting fits.
     camera.zoom = Math.min(1, camera.aspect / (W / H) * 1.15);
+    if (free < w) camera.setViewOffset(free, h, 0, 0, w, h);
+    else camera.clearViewOffset();
     camera.updateProjectionMatrix();
+    dirty = true;
   }
   new ResizeObserver(resize).observe($("stage"));
 
   const target = new Vector3();
   renderer.setAnimationLoop((t) => {
+    // Only draw when something changes: an idle viewer shouldn't drain a phone's battery.
+    const moving = ["explode", "theta", "phi", "radius"].some((k) => Math.abs(cur[k] - goal[k]) > 1e-4);
+    if (!dirty && !moving && !state.playing) { lastT = t; return; }
+    dirty = false;
     if (state.playing) {
       state.timeline = Math.min(state.timeline + (t - lastT) / 1000 / SECONDS_PER_LAYER, N);
       if (state.timeline >= N) state.playing = false;
@@ -342,6 +378,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
 
   refreshUI();
   manager.onLoad = () => {
+    dirty = true;
     $("loading").classList.add("hidden");
     // Intro: the painting opens into its layers, so it's obvious what the tool does.
     setTimeout(() => view("3d"), 700);

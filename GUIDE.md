@@ -17,7 +17,9 @@ Everything runs in your phone's browser: **nothing is uploaded anywhere**.
 
 ## 2. Calibration (once, about 15 minutes plus drying time)
 
-This teaches the tool **your** colors. Without it, a demo palette with made-up colors is used.
+This teaches the tool **your** colors. Until then you can use the **example palettes** (triad, split primary,
+landscape, portrait, student set): typical colors of common pigments, good for trying things out.
+If they don't match your paints exactly, **+ Combine colors** lets you build one with just the pigments you own.
 
 **Prepare the sheet**
 - Take a piece of the **same paper** you paint on.
@@ -91,7 +93,7 @@ This teaches the tool **your** colors. Without it, a demo palette with made-up c
 
 | problem | fix |
 |---|---|
-| All colors shifted (too yellow or too blue) | the photo has no unpainted paper, or the light differs from the calibration |
+| All colors shifted (too yellow or too blue), or a ⚠ about bare paper in the viewer | the photo has no unpainted paper, or the light differs from the calibration |
 | ⚠ during calibration | move the corners; if it stays, the "paper" cell isn't empty or full strength is lighter than medium |
 | One pigment shows up everywhere | uncheck the pigments you didn't use |
 | After an update you still see the old version | close and reopen the app |

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "example-triad",
+    "name": "Primary triad",
+    "description": "3 pigments · the cheapest useful start: a yellow, a cool red and a cool blue mix most colors.",
+    "pigments": [
+      { "id": "hansa-yellow-medium", "name": "Hansa yellow medium (PY97)", "masstone": [245, 195, 30] },
+      { "id": "quinacridone-rose", "name": "Quinacridone rose (PV19)", "masstone": [195, 45, 95] },
+      { "id": "phthalo-blue-gs", "name": "Phthalo blue GS (PB15:3)", "masstone": [10, 70, 140] }
+    ]
+  },
+  {
+    "id": "example-split-primary",
+    "name": "Split primary",
+    "description": "6 pigments · a warm and a cool version of each primary: clean mixes, the classic teaching palette.",
+    "pigments": [
+      { "id": "hansa-yellow-light", "name": "Hansa yellow light (PY3)", "masstone": [245, 220, 40] },
+      { "id": "new-gamboge", "name": "New gamboge (PY110/PY153)", "masstone": [235, 160, 20] },
+      { "id": "pyrrol-scarlet", "name": "Pyrrol scarlet (PR255)", "masstone": [220, 60, 40] },
+      { "id": "quinacridone-rose", "name": "Quinacridone rose (PV19)", "masstone": [195, 45, 95] },
+      { "id": "ultramarine", "name": "Ultramarine blue (PB29)", "masstone": [45, 55, 150] },
+      { "id": "phthalo-blue-gs", "name": "Phthalo blue GS (PB15:3)", "masstone": [10, 70, 140] }
+    ]
+  },
+  {
+    "id": "example-landscape",
+    "name": "Landscape",
+    "description": "8 pigments · earths, a green and soft blues for skies, foliage and fields.",
+    "pigments": [
+      { "id": "hansa-yellow-medium", "name": "Hansa yellow medium (PY97)", "masstone": [245, 195, 30] },
+      { "id": "yellow-ochre", "name": "Yellow ochre (PY43)", "masstone": [205, 155, 70] },
+      { "id": "burnt-sienna", "name": "Burnt sienna (PBr7)", "masstone": [160, 75, 40] },
+      { "id": "quinacridone-rose", "name": "Quinacridone rose (PV19)", "masstone": [195, 45, 95] },
+      { "id": "ultramarine", "name": "Ultramarine blue (PB29)", "masstone": [45, 55, 150] },
+      { "id": "cerulean", "name": "Cerulean blue (PB35)", "masstone": [60, 130, 185] },
+      { "id": "phthalo-green", "name": "Phthalo green BS (PG7)", "masstone": [10, 110, 90] },
+      { "id": "paynes-grey", "name": "Payne's grey", "masstone": [55, 60, 75] }
+    ]
+  },
+  {
+    "id": "example-portrait",
+    "name": "Portrait",
+    "description": "8 pigments · skin tones from ochre, sienna and reds; ultramarine, cerulean and violet for cool shadows.",
+    "pigments": [
+      { "id": "yellow-ochre", "name": "Yellow ochre (PY43)", "masstone": [205, 155, 70] },
+      { "id": "burnt-sienna", "name": "Burnt sienna (PBr7)", "masstone": [160, 75, 40] },
+      { "id": "cadmium-red-light", "name": "Cadmium red light (PR108)", "masstone": [215, 70, 45] },
+      { "id": "quinacridone-rose", "name": "Quinacridone rose (PV19)", "masstone": [195, 45, 95] },
+      { "id": "ultramarine", "name": "Ultramarine blue (PB29)", "masstone": [45, 55, 150] },
+      { "id": "cerulean", "name": "Cerulean blue (PB35)", "masstone": [60, 130, 185] },
+      { "id": "burnt-umber", "name": "Burnt umber (PBr7)", "masstone": [85, 60, 45] },
+      { "id": "dioxazine-violet", "name": "Dioxazine violet (PV23)", "masstone": [80, 40, 110] }
+    ]
+  },
+  {
+    "id": "example-student-12",
+    "name": "Student set (12)",
+    "description": "12 pigments · like the common student pan sets (\"hues\"): cheap and broad. Uncheck what you didn't use before breaking a painting down.",
+    "pigments": [
+      { "id": "lemon-yellow", "name": "Lemon yellow hue", "masstone": [240, 225, 60] },
+      { "id": "cadmium-yellow-hue", "name": "Cadmium yellow hue", "masstone": [245, 180, 25] },
+      { "id": "yellow-ochre", "name": "Yellow ochre", "masstone": [205, 155, 70] },
+      { "id": "cadmium-red-hue", "name": "Cadmium red hue", "masstone": [215, 65, 45] },
+      { "id": "alizarin-crimson-hue", "name": "Alizarin crimson hue", "masstone": [165, 35, 60] },
+      { "id": "ultramarine", "name": "Ultramarine", "masstone": [45, 55, 150] },
+      { "id": "cerulean-hue", "name": "Cerulean blue hue", "masstone": [55, 125, 185] },
+      { "id": "viridian-hue", "name": "Viridian hue", "masstone": [25, 125, 100] },
+      { "id": "sap-green", "name": "Sap green", "masstone": [90, 120, 40] },
+      { "id": "burnt-sienna", "name": "Burnt sienna", "masstone": [160, 75, 40] },
+      { "id": "burnt-umber", "name": "Burnt umber", "masstone": [85, 60, 45] },
+      { "id": "paynes-grey", "name": "Payne's grey", "masstone": [55, 60, 75] }
+    ]
+  }
+]

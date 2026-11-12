@@ -3,25 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#1d1f24">
+<meta name="theme-color" content="#15171c">
 __HEAD__
 <title>__TITLE__</title>
 <style>
   :root { color-scheme: dark; font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
-          --bg: #1d1f24; --panel: #25282f; --panel2: #2e323b; --line: #3a3f4b; --fg: #ece9e4; --muted: #9aa0ab; --accent: #e7b469; }
+          --bg: #15171c; --fg: #ece9e4; --muted: #a3a9b4; --accent: #e7b469;
+          --glass: rgba(255, 255, 255, 0.06); --glass-hi: rgba(255, 255, 255, 0.11); --glass-line: rgba(255, 255, 255, 0.13); }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); }
-  body { display: flex; }
-  #stage { flex: 1; position: relative; min-width: 0; touch-action: none; }
+  html, body { margin: 0; height: 100%; color: var(--fg); overflow: hidden; }
+  /* Neutral light behind the 3D scene (the canvas is transparent). No hue on purpose:
+     it shows through translucent layers and must not tint the pigments. */
+  body { background:
+      radial-gradient(60vmax 45vmax at 30% 15%, rgba(255, 255, 255, 0.07), transparent 70%),
+      radial-gradient(50vmax 40vmax at 75% 90%, rgba(255, 255, 255, 0.03), transparent 70%),
+      var(--bg); }
+  #stage { position: fixed; inset: 0; touch-action: none; }
   #stage canvas { width: 100%; height: 100%; display: block; cursor: grab; }
   #stage canvas:active { cursor: grabbing; }
-  #caption { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); max-width: calc(100% - 32px);
-             background: #000a; backdrop-filter: blur(6px); padding: 8px 14px; border-radius: 999px; font-weight: 600;
+
+  /* Glass: blur + saturate what's behind, hairline border, soft specular highlight on top. */
+  .glass {
+    background:
+      radial-gradient(120% 50% at 15% -8%, rgba(255, 255, 255, 0.16), transparent 60%),
+      linear-gradient(165deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025) 45%, rgba(255, 255, 255, 0.05));
+    -webkit-backdrop-filter: blur(26px) saturate(170%);
+    backdrop-filter: blur(26px) saturate(170%);
+    border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(255, 255, 255, 0.04), 0 24px 60px rgba(0, 0, 0, 0.35);
+  }
+
+  #caption { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: calc(100% - 32px);
+             padding: 9px 16px; border-radius: 999px; font-weight: 600;
              white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
   #loading { position: absolute; inset: 0; display: grid; place-items: center; background: var(--bg); color: var(--muted); }
-  aside { width: 310px; padding: 18px; background: var(--panel); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  aside { position: fixed; top: 16px; right: 16px; bottom: 16px; width: 320px; padding: 18px; border-radius: 24px;
+          overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
   .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  select.lang { background: var(--panel2); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; font: inherit; font-size: 13px; }
+  select.lang { background: var(--glass); color: var(--fg); border: 1px solid var(--glass-line); border-radius: 10px; padding: 4px 8px; font: inherit; font-size: 13px; }
   #home { color: var(--accent); text-decoration: none; font-size: 14px; }
   h1 { font-size: 20px; margin: 0; overflow-wrap: anywhere; }
   .ctl label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
@@ -29,43 +48,55 @@ __HEAD__
   .btns { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 6px; }
   .btns button { white-space: nowrap; padding: 0 6px; }
   button { font: inherit; color: inherit; }
-  .btns button, #save, #export { min-height: 42px; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; cursor: pointer; }
-  #play { background: var(--accent); color: #1d1f24; border-color: transparent; font-weight: 700; }
-  .btns button:hover, #save:hover, #export:hover { filter: brightness(1.12); }
+  .btns button, #save, #export {
+    min-height: 42px; border-radius: 12px; cursor: pointer;
+    background: linear-gradient(180deg, var(--glass-hi), var(--glass)); border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14); transition: background .15s, transform .1s;
+  }
+  .btns button:hover, #save:hover, #export:hover { background: linear-gradient(180deg, rgba(255, 255, 255, 0.17), var(--glass-hi)); }
+  .btns button:active, #save:active, #export:active { transform: scale(0.98); }
+  #play { background: linear-gradient(180deg, #f2cb8e, #e2a85a); color: #1d1f24; border-color: rgba(255, 255, 255, 0.35); font-weight: 700;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 6px 18px rgba(231, 180, 105, 0.25); }
+  #play:hover { background: linear-gradient(180deg, #f6d6a2, #e7b469); }
   .sect { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 4px 0 -6px; }
-  .layer { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 10px; cursor: pointer;
+  .layer { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 12px; cursor: pointer;
            user-select: none; border: 1px solid transparent; transition: opacity .15s, background .15s; }
-  .layer:hover { background: var(--panel2); }
-  .layer.solo { border-color: var(--accent); background: var(--panel2); }
+  .layer:hover { background: var(--glass); }
+  .layer.solo { border-color: rgba(231, 180, 105, 0.7); background: var(--glass-hi); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12); }
   .layer.off { opacity: .42; }
   .num { width: 20px; text-align: center; color: var(--muted); font-size: 13px; }
-  .sw { width: 26px; height: 26px; border-radius: 7px; border: 1px solid #0006; flex: none; }
+  /* Flat on purpose: the swatch is the pigment's color, no gloss that would shift it. */
+  .sw { width: 26px; height: 26px; border-radius: 8px; border: 1px solid rgba(0, 0, 0, 0.35); flex: none; }
   .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .txt b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .txt b { font-weight: 600; overflow-wrap: anywhere; line-height: 1.25; }
   .txt small { color: var(--muted); font-size: 12px; }
-  .eye { width: 34px; height: 34px; border-radius: 8px; background: none; border: 0; cursor: pointer; font-size: 16px; }
-  .eye:hover { background: #ffffff14; }
+  .eye { width: 34px; height: 34px; border-radius: 10px; background: none; border: 0; cursor: pointer; font-size: 16px; }
+  .eye:hover { background: var(--glass-hi); }
   .hint { font-size: 12px; color: var(--muted); margin: 0; }
+  .warn { font-size: 12px; margin: -6px 0 0; color: #f0b59a; }
   details { font-size: 12px; color: var(--muted); }
   summary { cursor: pointer; }
   details pre { white-space: pre-wrap; font: inherit; margin: 6px 0 0; }
   .hidden { display: none !important; }
+  /* Phones: panel below the scene, not over it (blurring a live 3D canvas every frame drains batteries). */
   @media (max-width: 760px) {
-    body { flex-direction: column; }
-    #stage { height: 58vh; flex: none; }
-    aside { width: 100%; flex: 1; padding: 14px; }
+    html, body { overflow: auto; height: auto; }
+    #stage { position: relative; height: 58vh; }
+    aside { position: relative; inset: auto; width: auto; margin: 10px; border-radius: 22px; padding: 14px; overflow: visible;
+            -webkit-backdrop-filter: none; backdrop-filter: none; }
     #caption { bottom: 10px; font-size: 13px; }
   }
 </style>
 </head>
 <body>
 <div id="stage">
-  <div id="caption" class="hidden"></div>
+  <div id="caption" class="glass hidden"></div>
   <div id="loading" data-i18n="v.loading"></div>
 </div>
-<aside>
+<aside class="glass">
   <div class="top"><a id="home" class="hidden" href="/" data-i18n="v.home"></a><span id="langSlot"></span></div>
   <h1 id="title"></h1>
+  <p id="paperWarn" class="warn hidden" data-i18n="v.paperWarn"></p>
   <div class="ctl">
     <label for="timeline"><span data-i18n="v.applied"></span><span id="timelineLabel"></span></label>
     <input id="timeline" type="range" min="0" step="0.01">

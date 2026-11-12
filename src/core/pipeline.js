@@ -71,7 +71,17 @@ export function prepare(rgba, width, height, pigments, { paperPct = 99.7, smooth
     }
     if (min > 0.92) whites++;
   }
-  return { paper, ksObs, whitesFraction: whites / P, A: pigments.map(pigmentKs) };
+  return { paper, paperSuspect: paperSuspect(paper), ksObs, whitesFraction: whites / P, A: pigments.map(pigmentKs) };
+}
+
+/**
+ * The paper estimate is the brightest pixels. If they are dark or strongly tinted, the photo most
+ * likely has no bare paper in it, and every color gets shifted: worth telling the user.
+ * (Cream paper under warm light is about 0.98/0.96/0.76 linear: still fine.)
+ */
+export function paperSuspect([r, g, b]) {
+  const lum = luminance(r, g, b);
+  return lum < 0.45 || Math.max(r, g, b) / Math.max(Math.min(r, g, b), 1e-3) > 1.6;
 }
 
 /** Splits K/S into `parts` contiguous chunks (for workers). */

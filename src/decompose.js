@@ -83,7 +83,7 @@ export async function decompose(source, palette, pigmentIds, { title, onProgress
   return {
     id: newId(), title, created: new Date().toISOString(),
     paletteId: palette.id, palette: palette.name, pigmentIds,
-    width, height, paper: prep.paper, error, whitesFraction: prep.whitesFraction, layers,
+    width, height, paper: prep.paper, paperSuspect: prep.paperSuspect, error, whitesFraction: prep.whitesFraction, layers,
     preview: await toBlob(canvas, "image/jpeg", 0.9), // same size as the layers: the viewer's "original"
     source,
   };

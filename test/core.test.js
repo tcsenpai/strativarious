@@ -113,3 +113,16 @@ describe("pipeline on the demo painting", () => {
     expect(Math.max(...img.filter((_, i) => i % 4 === 0))).toBe(255);
   });
 });
+
+describe("paper check", () => {
+  test("bare white or cream paper under warm light is fine", async () => {
+    const { paperSuspect } = await import("../src/core/pipeline.js");
+    expect(paperSuspect([0.97, 0.95, 0.88])).toBe(false);
+    expect(paperSuspect([0.994, 0.983, 0.764])).toBe(false); // the real portrait photo
+  });
+  test("a photo with no paper (brightest pixels are a blue sky) is flagged", async () => {
+    const { paperSuspect } = await import("../src/core/pipeline.js");
+    expect(paperSuspect([0.25, 0.3, 0.6])).toBe(true);
+    expect(paperSuspect([0.3, 0.3, 0.3])).toBe(true);
+  });
+});

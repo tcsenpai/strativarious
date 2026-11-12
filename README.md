@@ -14,9 +14,10 @@ compare the reconstruction with the photo. It runs entirely in the browser: noth
 painting**, or upload a photo of your own. It works on phones and can be installed as an app
 (PWA, works offline).
 
-For results that mean something, **calibrate your palette** once: paint a small grid with each pigment
-at full strength, medium and very diluted, photograph it, tap its four corners. The app learns your
-actual colors instead of guessing. Step-by-step guide for painters: [GUIDE.md](GUIDE.md)
+It ships with **example palettes** (a 3-pigment triad, split primary, landscape, portrait and a
+12-pan student set) built from typical colors of common pigments. For results that mean something,
+**calibrate your palette** once: paint a small grid with each pigment at full strength, medium and very
+diluted, photograph it, tap its four corners. The app learns your actual colors instead of guessing. Step-by-step guide for painters: [GUIDE.md](GUIDE.md)
 (Italian: [GUIDA.md](GUIDA.md)).
 
 Features:
@@ -24,7 +25,13 @@ Features:
 - Pigment unmixing with a Kubelka-Munk model, per pixel, in parallel Web Workers (≈3 s for 1024 px).
 - Palette calibration from a phone photo (perspective-corrected, normalized to the paper).
 - 3D viewer: exploded layers, glaze-by-glaze playback, solo/hide pigments, before/after wipe.
-- Re-run a painting with another palette; combine calibrated pigments into a *synthetic* palette.
+  The glass styling never touches pigment colors: the backdrop is neutral, sheen only appears on
+  unpainted parts of a layer, and the front view is the plain reconstruction. It only redraws when
+  something changes, to spare phone batteries.
+- Example palettes by size/budget, with pigment codes (PY97, PV19, PB15:3, …) to find them in a shop.
+- Choose which pigments you actually used before decomposing (the strongest hint you can give).
+- Warns when the photo has no bare paper (the paper color can't be estimated, colors would be shifted).
+- Re-run a painting with another palette; combine pigments from any palettes into a *synthetic* palette.
 - Export any result as a single self-contained HTML file (opens offline, can be shared).
 - Export/import palettes as JSON to move them between devices.
 - English and Italian.
@@ -45,8 +52,9 @@ brightest pixels. The glaze **order** is a craft heuristic (broad and light wash
 - This is an **ill-posed inverse problem**. RGB has 3 channels; with 6 pigments many mixtures produce the
   same color. You get *a* plausible sequence of glazes, not necessarily the one that was painted.
   Telling the app which pigments you actually used (checkboxes before decomposing) helps more than anything else.
-- Pixels are solved independently. In areas where several mixtures fit equally well, diluted layers can look
-  grainy. Spatial regularization is the most wanted improvement.
+- Pixels are solved independently (after a light 3x3 denoise). In areas where several mixtures fit equally
+  well, diluted layers can look grainy. Spatial regularization is the most wanted improvement.
+- Example palettes use typical, *estimated* pigment colors: brands and papers differ. Calibrate for real work.
 - Wet-in-wet, blooms, granulation and lifting are events, not layers: they get explained as glazes anyway.
 - Single-constant KM ignores scattering and opacity, so it works best for transparent pigments.
 - The algorithm is validated on synthetic paintings with known layers (see `test/`), not yet against
@@ -59,7 +67,7 @@ Requires [Bun](https://bun.sh).
 ```bash
 bun install
 bun run dev          # build + http://localhost:37041  (--lan to reach it from a phone)
-bun test             # core tests (KM, solver, calibration geometry, pipeline on the demo)
+bun test             # core tests (KM, solver, calibration geometry, pipeline on the demo, bundled palettes)
 bun run build        # static site in dist/, deployable anywhere
 bun run demo         # regenerate the procedural demo painting
 ```
@@ -72,8 +80,8 @@ enable *Settings → Pages → Source: GitHub Actions* once.
 src/core/      color science, solver, pipeline, calibration geometry (pure, tested)
 src/pages/     home, calibration, viewer pages
 src/viewer/    Three.js viewer (also bundled into exported HTML)
-src/static/    HTML, CSS, icons, manifest, demo image
-palettes/      demo palette
+src/static/    HTML, CSS, icons, manifest, demo images
+palettes/      demo palette (procedural demo + tests) and example palettes
 python/        numpy reference implementation + CLI
 scripts/       demo painting generator, dev server
 ```
