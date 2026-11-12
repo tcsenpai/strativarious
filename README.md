@@ -10,13 +10,14 @@ compare the reconstruction with the photo. It runs entirely in the browser: noth
 
 ## Use it
 
-Open the app (GitHub Pages: `https://<user>.github.io/strativarious/`), tap **Try it with the demo
+**Open the app: https://tcsenpai.github.io/strativarious/**, tap **Try it with the demo
 painting**, or upload a photo of your own. It works on phones and can be installed as an app
 (PWA, works offline).
 
 For results that mean something, **calibrate your palette** once: paint a small grid with each pigment
 at full strength, medium and very diluted, photograph it, tap its four corners. The app learns your
-actual colors instead of guessing. Step-by-step guide for painters (Italian): [GUIDA.md](GUIDA.md).
+actual colors instead of guessing. Step-by-step guide for painters: [GUIDE.md](GUIDE.md)
+(Italian: [GUIDA.md](GUIDA.md)).
 
 Features:
 

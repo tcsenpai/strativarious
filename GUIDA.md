@@ -5,9 +5,11 @@ si possono separare, riprodurre in ordine e guardare un pigmento alla volta.
 
 Funziona tutto nel browser del telefono: **niente viene caricato da nessuna parte**.
 
+*Traduzione italiana di [GUIDE.md](GUIDE.md).*
+
 ## 1. Apri e installa
 
-1. Apri il link dell'app.
+1. Apri **https://tcsenpai.github.io/strativarious/**.
 2. L'app parte in inglese: la lingua si cambia in alto a destra e resta salvata.
 3. Installala: su Android tocca **Installa l'app**; su iPhone **Condividi → Aggiungi alla schermata Home**.
    Da installata funziona anche senza internet.
