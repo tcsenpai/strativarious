@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <radialGradient id="light" cx="25%" cy="20%" r="80%">
+      <stop offset="0" stop-color="#23262d"/><stop offset="1" stop-color="#15171c"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#light)"/>
+  <image href="mark.svg" x="90" y="150" width="340" height="340"/>
+  <g font-family="Inter" fill="#ece9e4">
+    <text x="470" y="290" font-size="92" font-weight="700" letter-spacing="-1">Strativarious</text>
+    <text x="474" y="352" font-size="34" fill="#c4c8d0">Break a watercolor down into its glazes,</text>
+    <text x="474" y="396" font-size="34" fill="#c4c8d0">and explore them in 3D.</text>
+    <text x="474" y="470" font-size="22" fill="#e7b469" font-weight="600">Free &amp; open source · runs in your browser · nothing uploaded</text>
+  </g>
+</svg>

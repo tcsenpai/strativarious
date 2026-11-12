@@ -15,7 +15,10 @@ self.addEventListener("activate", (e) => {
 
 self.addEventListener("fetch", (e) => {
   const req = e.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== "GET" || url.origin !== location.origin) return;
+  // Video stays on the network: Safari needs HTTP range responses, which the cache can't serve.
+  if (url.pathname.endsWith(".mp4")) return;
   // ignoreSearch: viewer.html?id=… is the same cached page for every painting.
   e.respondWith(caches.match(req, { ignoreSearch: true }).then((hit) => hit ?? fetch(req)));
 });

@@ -3,7 +3,7 @@
   "short_name": "Strativarious",
   "description": "Breaks watercolors down into layers of color, in 3D.",
   "id": "./",
-  "start_url": "./",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#1d1f24",

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Strativarious">
+  <!-- Three glazes in perspective (the exploded view). Multiply blending inside an isolated group:
+       where sheets overlap the colors mix subtractively, like real glazes. Each wash is lighter in the
+       middle with pigment pooled at its edge. -->
+  <defs>
+    <radialGradient id="ochre" cx="42%" cy="45%" r="75%">
+      <stop offset="0" stop-color="#f6d79c"/><stop offset="0.7" stop-color="#e8b25e"/><stop offset="1" stop-color="#cf9137"/>
+    </radialGradient>
+    <radialGradient id="rose" cx="42%" cy="45%" r="75%">
+      <stop offset="0" stop-color="#f6a9c4"/><stop offset="0.7" stop-color="#df6b97"/><stop offset="1" stop-color="#bf4278"/>
+    </radialGradient>
+    <radialGradient id="ultra" cx="42%" cy="45%" r="75%">
+      <stop offset="0" stop-color="#a7b5f2"/><stop offset="0.7" stop-color="#6276d6"/><stop offset="1" stop-color="#3e52b3"/>
+    </radialGradient>
+  </defs>
+  <g style="isolation:isolate" stroke-linejoin="round" stroke-width="2.5">
+    <path style="mix-blend-mode:multiply" d="M12 38 L62 29 L62 94 L12 106 Z" fill="url(#ochre)" stroke="#cf9137"/>
+    <path style="mix-blend-mode:multiply" d="M36 30 L86 20 L86 86 L36 99 Z" fill="url(#rose)" stroke="#bf4278"/>
+    <path style="mix-blend-mode:multiply" d="M60 22 L114 11 L114 78 L60 92 Z" fill="url(#ultra)" stroke="#3e52b3"/>
+  </g>
+</svg>

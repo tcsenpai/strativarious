@@ -24,7 +24,7 @@ Se non corrispondono ai tuoi colori, con **+ Combina colori** ne crei una con i 
 **Prepara il foglio**
 - Prendi un pezzo della **stessa carta** che usi per dipingere.
 - A matita, traccia una griglia di **4 colonne** e **una riga per ogni pigmento** che usi davvero
-  (da 6 a 10 va benissimo, al massimo 12). Quadretti di 2–3 cm.
+  (da 6 a 10 va benissimo, al massimo 12). Quadretti di 2-3 cm.
 
 **Dipingi**
 

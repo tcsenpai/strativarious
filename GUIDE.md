@@ -24,7 +24,7 @@ If they don't match your paints exactly, **+ Combine colors** lets you build one
 **Prepare the sheet**
 - Take a piece of the **same paper** you paint on.
 - With a pencil, draw a grid with **4 columns** and **one row for each pigment** you actually use
-  (6 to 10 is great, 12 at most). Squares of about 2–3 cm.
+  (6 to 10 is great, 12 at most). Squares of about 2-3 cm.
 
 **Paint**
 

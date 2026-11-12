@@ -35,11 +35,11 @@ const id = new URLSearchParams(location.search).get("id");
 const painting = id && (await getPainting(id));
 if (!painting) {
   $("loading").textContent = t("err.not_found");
-  setTimeout(() => location.replace("./"), 1500);
+  setTimeout(() => location.replace("./app.html"), 1500);
 } else {
   startViewer({
     ...meta(painting),
     original: URL.createObjectURL(painting.preview),
     layers: painting.layers.map(({ png, ...l }) => ({ ...l, src: URL.createObjectURL(png) })),
-  }, { homeHref: "./", onExport: () => exportHtml(painting) });
+  }, { homeHref: "./app.html", onExport: () => exportHtml(painting) });
 }

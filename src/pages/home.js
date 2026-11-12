@@ -235,4 +235,5 @@ $("installBtn").onclick = async () => {
 };
 if (!standalone && isIos) $("installBtn").classList.remove("hidden");
 
-load();
+// Deep link from the landing page: app.html?demo starts the demo straight away.
+load().then(() => { if (new URLSearchParams(location.search).has("demo")) $("demoBtn").click(); });

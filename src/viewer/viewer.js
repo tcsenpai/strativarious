@@ -212,7 +212,7 @@ export function startViewer(data, { homeHref, onExport } = {}) {
     rows.forEach(({ row, eye }, i) => {
       row.classList.toggle("solo", state.solo === i);
       row.classList.toggle("off", weightOf(i) === 0);
-      eye.textContent = state.enabled[i] ? "👁" : "—";
+      eye.textContent = state.enabled[i] ? "👁" : "○";
       eye.title = t("v.eye");
       row.querySelector("small").textContent = t("v.coverage", { strength: strength(layers[i]), pct: Math.round(layers[i].coverage * 100) });
       eye.setAttribute("aria-pressed", String(!state.enabled[i]));

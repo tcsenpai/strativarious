@@ -33,7 +33,7 @@ await mkdir(dist, { recursive: true });
 
 // 1. App pages + solver worker (ES modules, shared chunks).
 await build({
-  entrypoints: ["pages/home.js", "pages/calibrate.js", "pages/viewer.js", "worker.js"].map((f) => join(src, f)),
+  entrypoints: ["pages/landing.js", "pages/home.js", "pages/calibrate.js", "pages/viewer.js", "worker.js"].map((f) => join(src, f)),
   outdir: dist, format: "esm", splitting: true,
   naming: { entry: "[name].[ext]", chunk: "chunk-[hash].[ext]" },
 });
@@ -46,7 +46,7 @@ await cp(join(src, "static"), dist, { recursive: true, filter: (f) => !f.endsWit
 const template = await readFile(join(src, "static/viewer.template.html"), "utf8");
 const fill = (s, map) => Object.entries(map).reduce((acc, [k, v]) => acc.replace(k, () => v), s);
 await writeFile(join(dist, "viewer.html"), fill(template, {
-  __HEAD__: '<link rel="manifest" href="./manifest.webmanifest">\n<link rel="icon" href="./icons/icon-192.png" type="image/png">',
+  __HEAD__: '<link rel="manifest" href="./manifest.webmanifest">\n<link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">',
   __TITLE__: "Strativarious",
   __SCRIPTS__: '<script type="module" src="./viewer.js"></script>',
 }));
@@ -61,7 +61,7 @@ await writeFile(join(dist, "standalone.html"), fill(template, {
 const files = (await walk(dist)).sort();
 const hash = createHash("sha256");
 for (const f of files) hash.update(relative(dist, f)).update(await readFile(f));
-const list = ["./", ...files.map((f) => "./" + relative(dist, f).split("\\").join("/"))];
+const list = ["./", ...files.map((f) => "./" + relative(dist, f).split("\\").join("/")).filter((f) => !f.endsWith(".mp4"))];
 await writeFile(join(dist, "sw.js"), fill(await readFile(join(src, "sw.js"), "utf8"), {
   __VERSION__: `strativarious-${hash.digest("hex").slice(0, 12)}`,
   __FILES__: JSON.stringify(list),

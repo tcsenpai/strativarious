@@ -173,7 +173,7 @@ $("save").onclick = async () => {
     await store.putPalette({ ...pal, id: store.newId() });
     store.persist();
     $("status").className = "ok";
-    $("status").replaceChildren(t("cal.saved"), h("a", { href: "./", textContent: t("cal.next") }));
+    $("status").replaceChildren(t("cal.saved"), h("a", { href: "./app.html", textContent: t("cal.next") }));
   } catch (err) {
     $("status").className = "small err";
     $("status").textContent = t("cal.saveFailed", { msg: errorText(err) });
